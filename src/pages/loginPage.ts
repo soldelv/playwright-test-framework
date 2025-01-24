@@ -25,13 +25,13 @@ export class LoginPage {
     }
 
     async login(username: string, password: string) {
-        await this.usernameField.fill(username);
-        await this.passwordField.fill(password);
-        await this.loginButton.click();
+        await this.usernameField.fill(username)
+        await this.passwordField.fill(password)
+        await this.loginButton.click()
     }
 
     async getErrorMessage(): Promise<string> {
-        return (await this.errorMessage.textContent()) ?? '';
+        return (await this.errorMessage.textContent()) ?? ''
     }
 
     async successLogin(): Promise<boolean> {

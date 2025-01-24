@@ -19,7 +19,7 @@ This project is a test automation framework built with [Playwright](https://play
 
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/your-username/playwright-test-framework.git
+git clone https://github.com/soldelv/playwright-test-framework.git
 cd playwright-test-framework
 ```
 ### **2. Install Dependencies**
@@ -43,7 +43,7 @@ npx playwright test --headed
 #### **Run a Single Test**
 Specify a single test file to run:
 ```bash
-npx playwright test tests/example.spec.ts
+npx playwright test tests/login.spec.ts
 ```
 
 #### **Generate HTML Reports**
@@ -60,25 +60,30 @@ project-root/
 │   │   ├── LoginPage.ts        # Login page actions and locators
 │   │   ├── ProductPage.ts      # Product page actions and locators
 │   ├── tests/                  # Test files
-│       ├── example.spec.ts     # Example test case
+│       ├── login.spec.ts     # Example test case
 ├── playwright.config.ts        # Playwright configuration
 ├── package.json                # Project metadata and dependencies
 ├── .gitignore                  # Files to ignore in Git
 ```
 ## 🧪 Example Test
 ``` typescript
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../src/pages/LoginPage';
+import { test, expect } from '@playwright/test'
+import { LoginPage } from '../pages/loginPage'
 
-test('Login with valid credentials', async ({ page }) => {
-  const loginPage = new LoginPage(page);
 
-  await loginPage.navigate();
-  await loginPage.login('standard_user', 'secret_sauce');
+test.describe('Login Page Suite', () => {
+    let loginPage: LoginPage
 
-  // Verify successful login
-  const title = await page.locator('.title').textContent();
-  expect(title).toBe('Products');
+    test.beforeEach(async ({ page }) => {
+        loginPage = new LoginPage(page);
+        await loginPage.navigate();
+    });
+
+    test('should login successfully with valid credentials', async () => {
+        await loginPage.login('standard_user', 'secret_sauce');
+        expect(await loginPage.successLogin()).toBeTruthy();
+    });
+
 });
 ``` 
 ## 🌐 Supported Browsers
