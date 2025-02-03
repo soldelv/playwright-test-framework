@@ -8,6 +8,7 @@ export default defineConfig({
   use: {
     browserName: 'chromium',
     headless: true,
+    trace: 'on',
     baseURL: 'https://www.saucedemo.com/',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
