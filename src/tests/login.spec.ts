@@ -1,48 +1,30 @@
 import { test, expect } from '@playwright/test'
 import { LoginPage } from '../pages/loginPage'
 
+
 test.describe('Login Page Suite', () => {
-    let loginPage: LoginPage
 
-    test.beforeEach(async ({ page }) => {
-        loginPage = new LoginPage(page)
+    test('test login successfully with valid credentials', async ({ page }) => {
+        const loginPage = new LoginPage(page)
         await loginPage.navigate()
-    });
-
-    test('should login successfully with valid credentials', async () => {
         await loginPage.login('standard_user', 'secret_sauce')
         expect(await loginPage.successLogin()).toBeTruthy()
     });
 
-    // TODO: the following tests are the same, need to improve the code and apply parameterization
-
-    test('should display error for invalid credentials', async () => {
-        await loginPage.login('standard_user', 'invalid_password')
-        expect(loginPage.checkErrorIconsVisibility()).toBeTruthy()
-        const errorMessage = await loginPage.getErrorMessage()
-        expect(errorMessage).toContain('Epic sadface: Username and password do not match any user in this service');
-    });
-
-    test('should display error for missing username', async () => {
-        await loginPage.login('', 'secret_sauce');
-        expect(loginPage.checkErrorIconsVisibility()).toBeTruthy()
-        const errorMessage = await loginPage.getErrorMessage()
-        expect(errorMessage).toContain('Epic sadface: Username is required')
-    });
-
-    test('should display error for missing password', async () => {
-        await loginPage.login('invalid_user', '');
-        expect(loginPage.checkErrorIconsVisibility()).toBeTruthy()
-        const errorMessage = await loginPage.getErrorMessage()
-        expect(errorMessage).toContain('Epic sadface: Password is required')
-    });
-
-    test('should display error for locked user', async () => {
-        await loginPage.login('locked_out_user', 'secret_sauce')
-        expect(loginPage.checkErrorIconsVisibility()).toBeTruthy()
-        const errorMessage = await loginPage.getErrorMessage()
-        expect(errorMessage).toContain('Epic sadface: Sorry, this user has been locked out.')
+    [
+        { username: 'standard_user', password: 'invalid_password', expectedError: 'Epic sadface: Username and password do not match any user in this service' },
+        { username: '', password: 'secret_sauce', expectedError: 'Epic sadface: Username is required' },
+        { username: 'invalid_user', password: '', expectedError: 'Epic sadface: Password is required' },
+        { username: 'locked_out_user', password: 'secret_sauce', expectedError: 'Epic sadface: Sorry, this user has been locked out.' },
+    ].forEach(({ username, password, expectedError }) => {
+        test(`test invalid login with ${expectedError}`, async ({ page }) => {
+            const loginPage = new LoginPage(page)
+            await loginPage.navigate()
+            await loginPage.login(username, password)
+            expect(await loginPage.checkErrorIconsVisibility()).toBeTruthy()
+            const errorMessage = await loginPage.getErrorMessage()
+            expect(errorMessage).toContain(expectedError)
+        });
     });
 
 });
-

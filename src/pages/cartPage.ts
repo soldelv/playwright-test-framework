@@ -14,14 +14,19 @@ export class CartPage extends BasePage {
         this.removeBtn = page.getByText('Remove')
     }
 
+    async goToCheckoutPage(): Promise<boolean> {
+        await this.checkoutBtn.click();
+        return (await this.pageTitle.textContent()) === 'Checkout: Your Information'
+    }
+
+    async removeFirstProductFromCart() {
+        const product = await this.removeBtn.first()
+        await product.click()
+    }
+
     async removeNProductsToCart(products: number) {
-        const buttons = await this.removeBtn.count();
-        if (buttons === 0) {
-            for (let i = 0; i < products; i++) {
-                const product = await this.removeBtn.nth(i);
-                await product.isVisible();
-                await product.click();
-            }
+        while (products-- > 0) {
+            await (await this.removeBtn.first()).click();
         }
     }
 

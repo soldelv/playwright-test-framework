@@ -1,28 +1,26 @@
 import { test, expect } from '@playwright/test'
 import { LoginPage } from '../pages/loginPage'
-import { InventoryPage } from '../pages/inventoryPage'
+import { ProductsPage } from '../pages/productsPage'
 import { CartPage } from '../pages/cartPage'
 
 test.describe('Cart Page Suite', () => {
-    let inventoryPage: InventoryPage
-    let loginPage: LoginPage
-    let cartPage: CartPage
+    let cartPage: CartPage    
 
-    test.beforeEach(async ({ page }) => {
-        inventoryPage = new InventoryPage(page)
-        loginPage = new LoginPage(page)
-        cartPage = new CartPage(page)
-        await inventoryPage.navigate()
+    test.beforeEach(async ({ page }) => {        
+        const loginPage = new LoginPage(page)
+        await loginPage.navigate()
         await loginPage.login('standard_user', 'secret_sauce')
-        expect(loginPage.checkErrorIconsVisibility()).toBeTruthy()
     });
 
-    test('remove all products from cart', async () => {
-        inventoryPage.addNProductsToCart(1)
-        cartPage.goToCartPage()
-        cartPage.removeNProductsToCart(1)
-        const product = await cartPage.removeBtn;
-        expect(await product.isVisible()).toBeFalsy()
+    test('add and remove all products from cart', async ({ page }) => {
+        const productsPage = new ProductsPage(page)
+        await productsPage.addNProductsToCart(2)
+        await productsPage.checkRemoveButtonIsDisplayedInFirstNProducts(2)
+        
+        const cartPage = new CartPage(page)
+        await cartPage.goToCartPage()
+        await cartPage.removeNProductsToCart(2)
+        expect(await cartPage.removeBtn.isVisible()).toBeFalsy()
     });
 
     // remove 1 product from cart, cart icon decrease by 1

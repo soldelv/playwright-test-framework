@@ -3,7 +3,6 @@ import { Page, Locator } from '@playwright/test';
 
 export class LoginPage extends BasePage {
 
-    
     readonly usernameField: Locator
     readonly passwordField: Locator
     readonly loginButton: Locator

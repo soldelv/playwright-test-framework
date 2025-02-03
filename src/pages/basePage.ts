@@ -2,11 +2,13 @@ import { Locator, Page } from '@playwright/test';
 
 export class BasePage {
     protected page: Page;
+    readonly pageTitle: Locator
     readonly logoTextField: Locator
     readonly cartBtn: Locator
 
     constructor(page: Page) {
         this.page = page;
+        this.pageTitle = page.locator('.title')
         this.logoTextField = page.locator('.app_logo')
         this.cartBtn = page.locator('.shopping_cart_link')
     }
@@ -16,7 +18,6 @@ export class BasePage {
     }
 
     async goToCartPage() {
-        await this.cartBtn.isVisible();
         await this.cartBtn.click();
     }
 }

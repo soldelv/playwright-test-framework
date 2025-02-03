@@ -1,7 +1,7 @@
 import { BasePage } from './basePage';
 import { Locator, Page } from '@playwright/test';
 
-export class InventoryPage extends BasePage {
+export class ProductsPage extends BasePage {
 
     readonly productList: Locator
     readonly addToCartBtn: Locator
@@ -19,8 +19,6 @@ export class InventoryPage extends BasePage {
 
         for (let i = 0; i < productCount; i++) {
             const product = this.productList.nth(i);
-            await product.waitFor({ state: 'visible' });
-
             const title = product.locator('.inventory_item_name ')
             const titleDesc = await title.textContent()
             const price = product.locator('.inventory_item_price')
@@ -29,40 +27,35 @@ export class InventoryPage extends BasePage {
             const isPriceVisible = await price.isVisible()
             const isButtonVisible = await addToCartButton.isVisible()
 
-            if (!isTitleVisible || !isPriceVisible || !isButtonVisible) {
-                console.log(`Product ${titleDesc} has an invisible element.`)
-                return false
-            }
+            if (!isTitleVisible || !isPriceVisible || !isButtonVisible) return false
             console.log(`Product ${titleDesc} is correctly displayed.`)
         }
         return true
     }
 
+    async addFirstProductToCart() {
+        const product = await this.addToCartBtn.first();
+        await product.click();
+    }
+
     async addNProductsToCart(products: number) {
-        await this.page.waitForLoadState('domcontentloaded');
-        const buttons = await this.addToCartBtn.count();
-        if (buttons === 0) {
-            for (let i = 0; i < products; i++) {
-                const product = await this.addToCartBtn.nth(i);
-                await product.isVisible();
-                await product.click();
-            }
+        for (let i = 0; i < products; i++) {
+            const product = await this.addToCartBtn.nth(i);
+            await product.click();
         }
     }
 
-    async checkRemoveButtonIsDisplayedInFirstNProducts(products: number): Promise<boolean> {
-        const buttons = await this.removeBtn.count();
-        if (buttons === 0) {
-            for (let i = 0; i < products; i++) {
-                const product = await this.removeBtn.nth(i);
+    async checkRemoveButtonIsDisplayedInFirstProduct(): Promise<boolean> {
+        const product = await this.removeBtn.first();
+        return product.isVisible()
+    }
 
-                if (!product.isVisible()) {
-                    return false
-                }
-            }
-            return true
+    async checkRemoveButtonIsDisplayedInFirstNProducts(products: number): Promise<boolean> {
+        for (let i = 0; i < products; i++) {
+            const product = await this.removeBtn.nth(i);
+            if (!product.isVisible()) return false
         }
-        return false
+        return true
     }
 
     async checkCartIconContainsProductsSelected(products: number): Promise<boolean> {

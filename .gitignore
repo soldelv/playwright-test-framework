@@ -1,5 +1,6 @@
 node_modules/
 test-results/
+dist/
 playwright-report/
 playwright/.cache/
 playwright-report/index.html
