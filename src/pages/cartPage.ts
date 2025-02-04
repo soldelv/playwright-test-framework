@@ -24,13 +24,10 @@ export class CartPage extends BasePage {
         await product.click()
     }
 
-    async removeNProductsToCart(products: number) {
+    async removeNProductsFromCart(products: number) {
         while (products-- > 0) {
             await (await this.removeBtn.first()).click();
         }
     }
 
-    // remove 1 product from cart, cart icon decrease by 1
-
-    // continue shopping button by clicking in checkout button
 }

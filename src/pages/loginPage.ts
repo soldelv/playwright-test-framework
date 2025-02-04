@@ -6,7 +6,6 @@ export class LoginPage extends BasePage {
     readonly usernameField: Locator
     readonly passwordField: Locator
     readonly loginButton: Locator
-    readonly errorMessage: Locator
     readonly errorIcon: Locator
 
     constructor(page: Page) {
@@ -14,7 +13,6 @@ export class LoginPage extends BasePage {
         this.usernameField = page.getByPlaceholder('Username')
         this.passwordField = page.getByPlaceholder('Password')
         this.loginButton = page.locator('#login-button')
-        this.errorMessage = page.locator('h3[data-test="error"]')
         this.errorIcon = page.locator('.fa-times-circle')
     }
 
@@ -22,10 +20,6 @@ export class LoginPage extends BasePage {
         await this.usernameField.fill(username)
         await this.passwordField.fill(password)
         await this.loginButton.click()
-    }
-
-    async getErrorMessage(): Promise<string> {
-        return (await this.errorMessage.textContent()) ?? ''
     }
 
     async successLogin(): Promise<boolean> {

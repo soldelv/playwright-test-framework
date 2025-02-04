@@ -4,9 +4,9 @@ import { ProductsPage } from '../pages/productsPage'
 import { CartPage } from '../pages/cartPage'
 
 test.describe('Cart Page Suite', () => {
-    let cartPage: CartPage    
+    let cartPage: CartPage
 
-    test.beforeEach(async ({ page }) => {        
+    test.beforeEach(async ({ page }) => {
         const loginPage = new LoginPage(page)
         await loginPage.navigate()
         await loginPage.login('standard_user', 'secret_sauce')
@@ -16,16 +16,24 @@ test.describe('Cart Page Suite', () => {
         const productsPage = new ProductsPage(page)
         await productsPage.addNProductsToCart(2)
         await productsPage.checkRemoveButtonIsDisplayedInFirstNProducts(2)
-        
+
         const cartPage = new CartPage(page)
         await cartPage.goToCartPage()
-        await cartPage.removeNProductsToCart(2)
+        await cartPage.removeNProductsFromCart(2)
         expect(await cartPage.removeBtn.isVisible()).toBeFalsy()
     });
 
-    // remove 1 product from cart, cart icon decrease by 1
+    test('verify cart icon number is updated when remove a product from cart', async ({ page }) => {
+        const productPage = new ProductsPage(page)
+        cartPage = new CartPage(page)
 
-    // continue shopping button by clicking in checkout button
+        await productPage.addNProductsToCart(3)
+        await cartPage.goToCartPage()
+        expect(await cartPage.checkCartIconContainsProductsSelected(3)).toBeTruthy()
+
+        await cartPage.removeNProductsFromCart(1)
+        expect(await cartPage.checkCartIconContainsProductsSelected(2)).toBeTruthy()
+    });
 
 });
 

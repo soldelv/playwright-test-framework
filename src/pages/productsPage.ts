@@ -10,8 +10,8 @@ export class ProductsPage extends BasePage {
     constructor(page: Page) {
         super(page);
         this.productList = page.locator('.inventory_item')
-        this.addToCartBtn = page.locator('[class="btn btn_primary btn_small btn_inventory "]')
-        this.removeBtn = page.locator('[class="btn btn_secondary btn_small btn_inventory "]')
+        this.addToCartBtn = page.getByText('Add to cart')
+        this.removeBtn = page.getByText('Remove')
     }
 
     async checkElementsDisplayedForEachProduct(): Promise<boolean> {
@@ -33,15 +33,17 @@ export class ProductsPage extends BasePage {
         return true
     }
 
-    async addFirstProductToCart() {
-        const product = await this.addToCartBtn.first();
-        await product.click();
+    async addNProductsToCart(products: number) {
+        while (products-- > 0) {
+            const index = this.addToCartBtn
+            await (await index.first()).click();
+        }
     }
 
-    async addNProductsToCart(products: number) {
-        for (let i = 0; i < products; i++) {
-            const product = await this.addToCartBtn.nth(i);
-            await product.click();
+    async removeNProductsFromCart(products: number) {
+        while (products-- > 0) {
+            const index = this.removeBtn
+            await (await index.first()).click();
         }
     }
 
@@ -58,10 +60,4 @@ export class ProductsPage extends BasePage {
         return true
     }
 
-    async checkCartIconContainsProductsSelected(products: number): Promise<boolean> {
-        const cartBtn = await this.cartBtn.textContent()
-        return Number(cartBtn) === products
-    }
-
-    // TODO: select 2 random products and get the price
 }

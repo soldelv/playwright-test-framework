@@ -16,7 +16,7 @@ test.describe('E2E Test for Checkout', () => {
 
     test('test successfully checkout', async ({ page }) => {
         const productsPage = new ProductsPage(page)
-        await productsPage.addFirstProductToCart()
+        await productsPage.addNProductsToCart(1)
         await productsPage.checkRemoveButtonIsDisplayedInFirstProduct()
 
         const cartPage = new CartPage(page)
