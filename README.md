@@ -4,7 +4,7 @@ This project is a test automation framework built with [Playwright](https://play
 
 ---
 
-## 📋 Features
+## Features
 
 - **Modern Testing Framework**: Uses Playwright and TypeScript for reliable and fast end-to-end testing.
 - **Page Object Model (POM)**: Implements POM to keep test cases clean and maintainable.
@@ -15,7 +15,7 @@ This project is a test automation framework built with [Playwright](https://play
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 ### **1. Clone the Repository**
 ```bash
@@ -28,7 +28,7 @@ Make sure you have Node.js installed. Then, run:
 npm install
 ```
 
-## 🚀 Usage
+## Usage
 #### **Run All Tests**
 To execute all test cases:
 ```bash
@@ -52,7 +52,7 @@ After running tests, view the report:
 npx playwright show-report
 ```
 
-## ⚙️ Project Structure
+## Project Structure
 ```css
 project-root/
 ├── src/
@@ -65,7 +65,7 @@ project-root/
 ├── package.json                # Project metadata and dependencies
 ├── .gitignore                  # Files to ignore in Git
 ```
-## 🧪 Example Test
+## Example Test
 ``` typescript
 import { test, expect } from '@playwright/test'
 import { LoginPage } from '../pages/loginPage'
@@ -86,11 +86,7 @@ test.describe('Login Page Suite', () => {
 
 });
 ``` 
-## 🌐 Supported Browsers
-- Chromium (Chrome)
-- WebKit (Safari)
-- Firefox
 
-## 🖥️ Requirements
+## Requirements
 - Node.js (v16 or later)
 - npm (installed with Node.js)
