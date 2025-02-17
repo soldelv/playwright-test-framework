@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../pages/loginPage'
-import { ProductsPage } from '../pages/productsPage'
-import { CartPage } from '../pages/cartPage'
+import { LoginPage } from '../../pages/loginPage'
+import { ProductsPage } from '../../pages/productsPage'
+import { CartPage } from '../../pages/cartPage'
 
 test.describe('Cart Page Suite', () => {
     let cartPage: CartPage

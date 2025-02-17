@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../pages/loginPage'
-import { ProductsPage } from '../pages/productsPage'
-import { CartPage } from '../pages/cartPage'
-import { CheckoutInformationPage } from '../pages/checkoutInformationPage'
+import { LoginPage } from '../../pages/loginPage'
+import { ProductsPage } from '../../pages/productsPage'
+import { CartPage } from '../../pages/cartPage'
+import { CheckoutInformationPage } from '../../pages/checkoutInformationPage'
 
 test.describe('Checkout: Your Information Page Suite', () => {
 

@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../pages/loginPage'
-import { ProductsPage } from '../pages/productsPage'
-import { CartPage } from '../pages/cartPage'
-import { CheckoutInformationPage } from '../pages/checkoutInformationPage'
-import { CheckoutOverviewPage } from '../pages/checkoutOverviewPage'
-import { CheckoutCompletePage } from '../pages/checkoutCompletePage'
+import { LoginPage } from '../../pages/loginPage'
+import { ProductsPage } from '../../pages/productsPage'
+import { CartPage } from '../../pages/cartPage'
+import { CheckoutInformationPage } from '../../pages/checkoutInformationPage'
+import { CheckoutOverviewPage } from '../../pages/checkoutOverviewPage'
+import { CheckoutCompletePage } from '../../pages/checkoutCompletePage'
 
 test.describe('E2E Test for Checkout', () => {
 

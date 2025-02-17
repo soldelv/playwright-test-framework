@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../pages/loginPage'
-import { ProductsPage } from '../pages/productsPage'
+import { LoginPage } from '../../pages/loginPage'
+import { ProductsPage } from '../../pages/productsPage'
+import { validUser } from '../ui/data/testData';
 
 test.describe('Products Page Suite', () => {
 
@@ -8,7 +9,7 @@ test.describe('Products Page Suite', () => {
         const loginPage = new LoginPage(page)
 
         await loginPage.navigate()
-        await loginPage.login('standard_user', 'secret_sauce')
+        await loginPage.login(validUser.username, validUser.password)
     });
 
     test('each products should display title, description and cart button', async ({page}) => {

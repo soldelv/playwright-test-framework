@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../pages/loginPage'
+import { LoginPage } from '../../pages/loginPage'
+import { validUser } from '../ui/data/testData';
 
 
 test.describe('Login Page Suite', () => {
@@ -11,7 +12,7 @@ test.describe('Login Page Suite', () => {
     });
 
     test('test login successfully with valid credentials', async () => {
-        await loginPage.login('standard_user', 'secret_sauce')
+        await loginPage.login(validUser.username, validUser.password)
         expect(await loginPage.successLogin()).toBeTruthy()
     });
 
