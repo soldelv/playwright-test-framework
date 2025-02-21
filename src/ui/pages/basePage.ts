@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-export class BasePage {
+export abstract class BasePage {
     protected page: Page;
     readonly pageTitle: Locator
     readonly logoTextField: Locator
