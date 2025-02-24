@@ -28,7 +28,7 @@ export const petId = "9223372036854775807"
 export const invalidId = "000000000000000000"
 
 export const newPet = new Pet(
-    Math.floor(1000000000000000 + Math.random() * 9000000000000000),
+    getRandomId(),
     new Category(0, "string"),
     "necoma",
     ["string"],
@@ -37,7 +37,7 @@ export const newPet = new Pet(
 )
 
 export const petToFind = new Pet(
-    Math.floor(1000000000000000 + Math.random() * 9000000000000000),
+    getRandomId(),
     new Category(1, "buddy"),
     "Marley",
     ["string"],
@@ -45,11 +45,37 @@ export const petToFind = new Pet(
     "available"
 )
 
-export const newOrder = new Order (
-    Math.floor(1000000000000000 + Math.random() * 9000000000000000),
+export function createListPets(quantity: number, statusName: string): Pet[] {
+    let pets: Pet[] = []
+
+    for (let i = 0; i < quantity; i++) {
+        const pet = new Pet(
+            getRandomId(),
+            new Category(1, "list"),
+            "Marley",
+            ["string"],
+            [new Tag(0, "test")],
+            statusName
+        )
+        pets.push(pet)
+    }
+
+    return pets
+}
+
+export const newOrder = new Order(
+    getRandomId(),
     0,
     1,
     new Date().toISOString().replace("Z", "+0000"),
     "placed",
     true
 )
+
+export function getRandomId(): number {
+    return Math.floor(1000000000000000 + Math.random() * 9000000000000000)
+}
+
+export function getCurrentDatetime(): string {
+    return new Date().toISOString().slice(2, 16).replace(/[-T:]/g, '')
+}

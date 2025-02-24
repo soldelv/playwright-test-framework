@@ -11,6 +11,13 @@ export class PetApi extends BaseApi {
         return this.post(PetApi.BASE_URL, pet)
     }
 
+    async createNPets(pets: Pet[]): Promise<void> {
+        // for (const pet of pets) {
+        //     await this.createNewPet(pet)
+        // }
+        await Promise.all(pets.map(pet => this.createNewPet(pet)))
+    }
+
     async uploadImage(petId: String): Promise<APIResponse> {
         const url = `${PetApi.BASE_URL}/${petId}/uploadImage`
 
@@ -38,9 +45,16 @@ export class PetApi extends BaseApi {
         })
     }
 
-    async deleteUPet(petId: String): Promise<APIResponse> {
+    async deletePet(petId: String): Promise<APIResponse> {
         const url = `${PetApi.BASE_URL}/${petId}`
         return this.delete(url)
+    }
+
+    async deleteNPets(pets: Pet[]): Promise<void> {
+        // for (const pet of pets) {
+        //     await this.deletePet(`${pet.id}`)
+        // }
+        await Promise.all(pets.map(pet => this.deletePet(`${pet.id}`)))
     }
 
 }

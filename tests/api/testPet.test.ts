@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { PetApi } from '../../src/api/petApi'
-import { newPet, petToFind, petId, invalidId } from './data/testData'
+import { newPet, petToFind, petId, invalidId, createListPets, getCurrentDatetime } from './data/testData'
 import { Pet } from '../../src/models/pet'
 import { BasicResponse } from '../../src/models/basicResponse'
 
@@ -75,11 +75,11 @@ test.describe('API Test: PetStore Pet', () => {
         expect(addedPet?.status).toBe(petToFind.status)
     })
 
-    test('test delete an user', async () => {
+    test('test delete a pet by id', async () => {
         const api = new PetApi()
         await api.createNewPet(newPet)
 
-        const response = await api.deleteUPet(`${newPet.id}`)
+        const response = await api.deletePet(`${newPet.id}`)
         expect(await response.status()).toBe(200)
 
         const responseBody: BasicResponse = await response.json()
@@ -89,8 +89,40 @@ test.describe('API Test: PetStore Pet', () => {
     test('test try to delete a non-existing pet', async () => {
         const api = new PetApi()
 
-        const response = await api.deleteUPet(invalidId)
+        const response = await api.deletePet(invalidId)
         expect(await response.status()).toBe(404);
+    })
+
+    test('test create and remove list of pets', async () => {
+
+        const api = new PetApi()
+        const statusName = `test_status${getCurrentDatetime()}`
+        let pets: Pet[] = createListPets(10, statusName)
+        await api.createNPets(pets)
+
+        // for (const pet of pets) {
+        //     const response = await api.getPetById(`${pet.id}`)
+        //     expect(await response.status()).toBe(200)
+        // }
+
+        await Promise.all(
+            pets.map(async (pet) => {
+                const response = await api.getPetById(`${pet.id}`)
+                expect(response.status()).toBe(200)
+            })
+        )
+
+        let responsePet = await api.findPetByStatus(statusName)
+        expect(responsePet.status()).toBe(200)
+        let petsList: Pet[] = await responsePet.json()
+        expect(petsList.length).toBe(pets.length)
+
+        await api.deleteNPets(pets)
+
+        responsePet = await api.findPetByStatus(statusName)
+        expect(responsePet.status()).toBe(200)
+        petsList = await responsePet.json()
+        expect(petsList).toHaveLength(0)
     })
 
 });

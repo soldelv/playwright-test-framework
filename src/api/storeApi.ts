@@ -18,6 +18,14 @@ export class StoreApi extends BaseApi {
         })
     }
 
+    async getInventory(): Promise<APIResponse> {
+        const url = `${StoreApi.BASE_URL}/inventory`
+
+        return this.get(url, {
+            headers: config.headers
+        })
+    }
+
     async getInventoryByStatus(): Promise<APIResponse> {
         const url = `${StoreApi.BASE_URL}/findByStatus`
 
