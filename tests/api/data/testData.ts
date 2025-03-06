@@ -27,6 +27,15 @@ export const updatedUser = new User(
 export const petId = "9223372036854775807"
 export const invalidId = "000000000000000000"
 
+export const addPet = new Pet(
+    12340976512343543,
+    new Category(0, "string"),
+    "necoma",
+    ["string"],
+    [new Tag(0, "string")],
+    "available"
+)
+
 export const newPet = new Pet(
     getRandomId(),
     new Category(0, "string"),
@@ -42,7 +51,7 @@ export const petToFind = new Pet(
     "Marley",
     ["string"],
     [new Tag(0, "test")],
-    "available"
+    "pending"
 )
 
 export function createListPets(quantity: number, statusName: string): Pet[] {
@@ -50,8 +59,8 @@ export function createListPets(quantity: number, statusName: string): Pet[] {
 
     for (let i = 0; i < quantity; i++) {
         const pet = new Pet(
-            getRandomId(),
-            new Category(1, "list"),
+            1234097651234354 + i,
+            new Category(0, "string"),
             "Marley",
             ["string"],
             [new Tag(0, "test")],
@@ -64,8 +73,8 @@ export function createListPets(quantity: number, statusName: string): Pet[] {
 }
 
 export const newOrder = new Order(
-    getRandomId(),
-    0,
+    9222968140491042149,
+    9222968140491042149,
     1,
     new Date().toISOString().replace("Z", "+0000"),
     "placed",

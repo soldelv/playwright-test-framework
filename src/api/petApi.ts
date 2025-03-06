@@ -21,7 +21,7 @@ export class PetApi extends BaseApi {
     async uploadImage(petId: String): Promise<APIResponse> {
         const url = `${PetApi.BASE_URL}/${petId}/uploadImage`
 
-        const imagePath = path.join(__dirname, '../../', 'resources', 'pet-image2.webp')
+        const imagePath = path.join(__dirname, '../../resources/', 'images', 'pet-image2.webp')
         return this.postImage(url, imagePath)
     }
 

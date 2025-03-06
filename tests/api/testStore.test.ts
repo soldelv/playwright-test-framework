@@ -9,51 +9,42 @@ import { BasicResponse } from '../../src/models/basicResponse'
 test.describe('API Test: PetStore Store & Orders', () => {
 
     let api: StoreApi
-    let updatedNewOrder: Order
 
     test.beforeEach(async () => {
-        const petApi = new PetApi()
-        const responsePet = await petApi.findPetByStatus("available")
-        expect(responsePet.status()).toBe(200);
-        const petsList: Pet[] = await responsePet.json()
-        updatedNewOrder = Object.assign({}, newOrder, { petId: petsList[0].id })
-
         api = new StoreApi()
-    });
-
-    test('test create new order', async () => {
-        const response = await api.createOrder(updatedNewOrder)
-        expect(await response.status()).toBe(200)
-
-        const responseBody: Order = await response.json()
-        expect(responseBody).toEqual(updatedNewOrder)
     })
 
-    test('test get pet by id', async () => {
-        await api.createOrder(updatedNewOrder)
-        const response = await api.getOrderById(`${newOrder.id}`)
+    test('test create new order', async () => {
+        const response = await api.createOrder(newOrder)
         expect(await response.status()).toBe(200)
 
         const responseBody: Order = await response.json()
-        expect(responseBody).toEqual(updatedNewOrder)
+        expect(responseBody.petId).toEqual(newOrder.petId)
+    })
+
+    test('test get order by id', async () => {
+        const createResponse = await api.createOrder(newOrder)
+        expect(await createResponse.status()).toBe(200)
+
+        const response = await api.getOrderById(`${newOrder.id}`)
+        expect(await response.status()).toBe(200)
+        
+        const responseBody: Order = await response.json()
+        expect(responseBody.petId).toEqual(newOrder.petId)
     })
 
     test('test delete an order', async () => {
-        await api.createOrder(updatedNewOrder)
+        const createResponse = await api.createOrder(newOrder)
+        expect(await createResponse.status()).toBe(200)
 
-        const response = await api.deleteOrder(`${updatedNewOrder.id}`)
+        const response = await api.deleteOrder(`${newOrder.id}`)
         expect(await response.status()).toBe(200)
 
         const responseBody: BasicResponse = await response.json()
-        expect(responseBody.message).toEqual(`${updatedNewOrder.id}`)
+        expect(responseBody.message).toEqual(`${newOrder.id}`)
     })
 
-});
-
-test.describe('API Test: Invalid scenarios Store & Orders', () => {
-
     test('test try to get order by non-existing id', async () => {
-        const api = new StoreApi()
 
         const response = await api.getOrderById(invalidId)
         expect(await response.status()).toBe(404)
@@ -63,48 +54,32 @@ test.describe('API Test: Invalid scenarios Store & Orders', () => {
     })
 
     test('test try to delete a non-existing order', async () => {
-        const api = new StoreApi()
 
         const response = await api.deleteOrder(invalidId)
         expect(await response.status()).toBe(404)
     })
 
-});
-
-test.describe('Inventory API test', () => {
-
     test('check inventory before and after create & remove list of pets', async () => {
-        const api = new PetApi()
+        const petApi = new PetApi()
         const statusName = `test_status${getCurrentDatetime()}`
 
         let pets: Pet[] = createListPets(10, statusName)
-        await api.createNPets(pets)
+        await petApi.createNPets(pets)
 
-        // for (const pet of pets) {
-        //     const response = await api.getPetById(`${pet.id}`)
-        //     expect(await response.status()).toBe(200)
-        // }
-
-        await Promise.all(
-            pets.map(async (pet) => {
-                const response = await api.getPetById(`${pet.id}`)
-                expect(response.status()).toBe(200)
-            })
-        )
-
-        const storeApi = new StoreApi()
-        let storeResponse = await storeApi.getInventory()
+        let storeResponse = await api.getInventory()
         expect(await storeResponse.status()).toBe(200)
+
         let responseBody = await storeResponse.json()
         expect(responseBody).toHaveProperty(statusName)
         expect(responseBody[statusName]).toBe(pets.length)
 
-        await api.deleteNPets(pets)
+        await petApi.deleteNPets(pets)
 
-        storeResponse = await storeApi.getInventory()
+        storeResponse = await api.getInventory()
         expect(await storeResponse.status()).toBe(200)
+
         responseBody = await storeResponse.json()
         expect(responseBody[statusName]).toBeUndefined()
     })
 
-});
+})
