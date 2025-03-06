@@ -51,7 +51,8 @@ test.describe('API Test: PetStore User', () => {
 
     test('test delete an user', async () => {
         const api = new UserApi()
-        await api.createNewUser(newUser)
+        const createResponse = await api.createNewUser(newUser)
+        expect(await createResponse.status()).toBe(200)
 
         const response = await api.deleteUser(newUser.username)
         expect(await response.status()).toBe(200)
