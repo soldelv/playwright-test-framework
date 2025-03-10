@@ -23,22 +23,22 @@ Before setting up the project, ensure you have the following installed:
 
 ## Installation
 
-### **1. Clone the Repository**
+**1. Clone the Repository**
 ```bash
 git clone https://github.com/soldelv/playwright-test-framework.git
 cd playwright-test-framework
 ```
-### **2. Navigate to the project directory**
+**2. Navigate to the project directory**
 ```bash
 cd playwright-test-framework
 ```
 
-### **3. Install Dependencies**
+**3. Install Dependencies**
 ```bash
 npm install
 ```
 
-### **4. Install Playwright browsers**
+**4. Install Playwright browsers**
 ```bash
 npx playwright install
 ```
@@ -96,7 +96,7 @@ npx playwright show-report
 This will open the test report in your default web browser.
 
 ## Continuous Integration
-This project is set up with GitHub Actions for Continuous Integration (CI). The workflow file located at .github/workflows/playwright.yml is configured to run the tests on each push to the master branch. The CI pipeline performs the following steps:
+This project is set up with GitHub Actions for Continuous Integration (CI). The workflow file located at .github/workflows/pipeline.yml is configured to run the tests on each push to the master branch. The CI pipeline performs the following steps:
 
 - Checks out the repository.
 - Sets up Node.js (version 22.13.0).
