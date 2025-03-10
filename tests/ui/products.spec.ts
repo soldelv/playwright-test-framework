@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
-import { LoginPage } from '../../src/ui/pages/loginPage'
-import { ProductsPage } from '../../src/ui/pages/productsPage'
+import { LoginPage } from '../../src/ui/loginPage'
+import { ProductsPage } from '../../src/ui/productsPage'
 import { validUser } from './data/testData';
 
 test.describe('Products Page Suite', () => {
