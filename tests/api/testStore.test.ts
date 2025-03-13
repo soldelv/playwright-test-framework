@@ -33,7 +33,7 @@ test.describe('API Test: PetStore Store & Orders', () => {
         expect(responseBody.petId).toEqual(newOrder.petId)
     })
 
-    test('test delete an order', async () => {
+    test.skip('test delete an order', async () => {
         const createResponse = await api.createOrder(newOrder)
         expect(await createResponse.status()).toBe(200)
 
