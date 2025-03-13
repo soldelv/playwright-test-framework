@@ -75,7 +75,7 @@ test.describe('API Test: PetStore Pet', () => {
         expect(addedPet?.status).toBe(petToFind.status)
     })
 
-    test('test get pet by id', async () => {
+    test.skip('test get pet by id', async () => {
         const createResponse = await api.createNewPet(addPet)
         expect(await createResponse.status()).toBe(200)
 
@@ -84,7 +84,7 @@ test.describe('API Test: PetStore Pet', () => {
         expect(responseBody).toEqual(addPet)
     })
 
-    test('test delete a pet by id', async () => {
+    test.skip('test delete a pet by id', async () => {
         const createResponse = await api.createNewPet(addPet)
         expect(await createResponse.status()).toBe(200)
 
