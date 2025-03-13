@@ -27,37 +27,19 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
 
-      - name: Commit Playwright Report
-        if: always()
+      - name: Prepare reports for GitHub Pages
         run: |
-          git add playwright-report
-          git commit -m "Update Playwright test report [skip ci]" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main || echo "No changes to push"
+          mkdir -p reports
+          # Copy report files to reports directory
+          cp -r playwright-report/* reports/
+          # Add cache control headers to index.html
+          sed -i '1i<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">' reports/index.html
+          sed -i '2i<meta http-equiv="Pragma" content="no-cache">' reports/index.html
+          sed -i '3i<meta http-equiv="Expires" content="0">' reports/index.html
 
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - name: Check out gh-pages branch
-        uses: actions/checkout@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          ref: gh-pages
-          fetch-depth: 0  # Ensures history is preserved
-
-      - name: Copy Playwright Report from main
-        run: |
-          git checkout main -- playwright-report
-          mv playwright-report/* .  # Move contents from playwright-report to the root directory
-          rm -rf playwright-report  # Clean up
-
-      - name: Commit and Push Report to gh-pages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}  # Use Personal Access Token
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Deploy Playwright Report [skip ci]" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git gh-pages || echo "No changes to push"
+          github_token: ${{ secrets.GH_PAT }}
+          publish_dir: ./reports
+          publish_branch: gh-pages
