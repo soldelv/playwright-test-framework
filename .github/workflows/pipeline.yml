@@ -46,22 +46,20 @@ jobs:
           ref: gh-pages
           fetch-depth: 0  # Ensures history is preserved
 
-      - name: Copy Playwright Report from main
+      - name: Fetch main branch
         run: |
-          git checkout main -- playwright-report
+          git fetch origin main
+
+      - name: Check out main branch and copy the report
+        run: |
+          git checkout origin/main -- playwright-report
           rm -rf .gitignore README.md
           mv playwright-report/* .
           rm -rf playwright-report
 
-      - name: Check out main branch
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 0  # Ensures full history is fetched
-
       - name: Commit and Push Report to gh-pages
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}  # Use Personal Access Token
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
