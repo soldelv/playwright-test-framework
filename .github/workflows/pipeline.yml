@@ -46,16 +46,11 @@ jobs:
           ref: gh-pages
           fetch-depth: 0  # Ensures history is preserved
 
-      - name: Fetch main branch
+      - name: Copy Playwright Report from main
         run: |
-          git fetch origin main
-
-      - name: Check out main branch and copy the report
-        run: |
-          git checkout origin/main -- playwright-report
-          rm -rf .gitignore README.md
-          mv playwright-report/* .
-          rm -rf playwright-report
+          git checkout main -- playwright-report
+          mv playwright-report/* .  # Move contents from playwright-report to the root directory
+          rm -rf playwright-report  # Clean up
 
       - name: Commit and Push Report to gh-pages
         env:
