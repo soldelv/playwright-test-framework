@@ -31,6 +31,11 @@ jobs:
         run: |
           mkdir -p reports
           cp -r playwright-report/* reports/
+          
+          # Clean up cache of index.html
+          sed -i '1i<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">' reports/index.html
+          sed -i '2i<meta http-equiv="Pragma" content="no-cache">' reports/index.html
+          sed -i '3i<meta http-equiv="Expires" content="0">' reports/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
