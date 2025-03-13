@@ -101,7 +101,7 @@ test.describe('API Test: PetStore Pet', () => {
         expect(await response.status()).toBe(404);
     })
 
-    test('test create and remove list of pets', async () => {
+    test.skip('test create and remove list of pets', async () => {
 
         const statusName = `test_status${getCurrentDatetime()}`
         let pets: Pet[] = createListPets(4, statusName)

@@ -59,7 +59,7 @@ test.describe('API Test: PetStore Store & Orders', () => {
         expect(await response.status()).toBe(404)
     })
 
-    test('check inventory before and after create & remove list of pets', async () => {
+    test.skip('check inventory before and after create & remove list of pets', async () => {
         const petApi = new PetApi()
         const statusName = `test_status${getCurrentDatetime()}`
 

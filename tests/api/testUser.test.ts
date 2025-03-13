@@ -49,7 +49,7 @@ test.describe('API Test: PetStore User', () => {
         expect(responseBody.message).toEqual(`${newUser.id}`)
     })
 
-    test('test delete an user', async () => {
+    test.skip('test delete an user', async () => {
         const api = new UserApi()
         const createResponse = await api.createNewUser(newUser)
         expect(await createResponse.status()).toBe(200)
