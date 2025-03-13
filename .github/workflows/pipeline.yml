@@ -53,6 +53,12 @@ jobs:
           mv playwright-report/* .
           rm -rf playwright-report
 
+      - name: Check out main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0  # Ensures full history is fetched
+
       - name: Commit and Push Report to gh-pages
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
