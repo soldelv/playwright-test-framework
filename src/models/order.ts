@@ -21,4 +21,15 @@ export class Order {
         this.status = status
         this.complete = complete
     }
+
+    static fromJson(data: any): Order {
+        return new Order(
+            data.id ?? 0,
+            data.petId ?? 0,
+            data.quantity ?? 0,
+            data.shipDate ?? "",
+            data.status ?? "",
+            data.complete ?? false
+        );
+    }
 }

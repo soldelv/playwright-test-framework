@@ -14,6 +14,17 @@ export class Pet {
         this.tags = tags
         this.status = status
     }
+
+    static fromJson(data: any): Pet {
+        return new Pet(
+            data.id ?? 0,
+            new Category(data.category?.id ?? 0, data.category?.name ?? ""), // Convert category properly
+            data.name ?? "",
+            data.photoUrls ?? [],
+            (data.tags ?? []).map((tag: any) => new Tag(tag.id ?? 0, tag.name ?? "")), // Convert tags properly
+            data.status ?? ""
+        );
+    }
 }
 
 export class Category {

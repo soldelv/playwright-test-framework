@@ -28,7 +28,7 @@ test.describe('API Test: PetStore Store & Orders', () => {
 
         const response = await api.getOrderById(`${newOrder.id}`)
         expect(await response.status()).toBe(200)
-        
+
         const responseBody: Order = await response.json()
         expect(responseBody.petId).toEqual(newOrder.petId)
     })

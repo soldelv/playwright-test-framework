@@ -12,9 +12,6 @@ export class PetApi extends BaseApi {
     }
 
     async createNPets(pets: Pet[]): Promise<void> {
-        // for (const pet of pets) {
-        //     await this.createNewPet(pet)
-        // }
         await Promise.all(pets.map(pet => this.createNewPet(pet)))
     }
 
@@ -51,9 +48,6 @@ export class PetApi extends BaseApi {
     }
 
     async deleteNPets(pets: Pet[]): Promise<void> {
-        // for (const pet of pets) {
-        //     await this.deletePet(`${pet.id}`)
-        // }
         await Promise.all(pets.map(pet => this.deletePet(`${pet.id}`)))
     }
 

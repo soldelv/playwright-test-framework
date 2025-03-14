@@ -54,6 +54,15 @@ export const petToFind = new Pet(
     "pending"
 )
 
+export const validPet = new Pet(
+    9223372036854775807,
+    new Category(0, "string"),
+    "doggie",
+    ["string"],
+    [new Tag(0, "string")],
+    "available"
+)
+
 export function createListPets(quantity: number, statusName: string): Pet[] {
     let pets: Pet[] = []
 

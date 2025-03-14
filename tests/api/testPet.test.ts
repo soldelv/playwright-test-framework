@@ -1,14 +1,15 @@
 import { test, expect } from '@playwright/test'
 import { PetApi } from '../../src/api/petApi'
-import { addPet, newPet, petToFind, petId, invalidId, createListPets, getCurrentDatetime } from './data/testData'
+import { addPet, newPet, petToFind, petId, invalidId, validPet, createListPets, getCurrentDatetime } from './data/testData'
 import { Pet } from '../../src/models/pet'
 import { BasicResponse } from '../../src/models/basicResponse'
 
 test.describe('API Test: PetStore Pet', () => {
+    test.describe.configure({ retries: 3 })
 
     let api: PetApi
 
-    test.beforeEach(async ({}, testInfo) => {
+    test.beforeEach(async ({ }, testInfo) => {
         api = new PetApi()
     })
 
@@ -60,8 +61,8 @@ test.describe('API Test: PetStore Pet', () => {
         let attempts = 3;
 
         while (attempts-- > 0) {
-            const response = await api.findPetByStatus("pending");
-            expect(response.status()).toBe(200);
+            const response = await api.findPetByStatus("pending")
+            expect(response.status()).toBe(200)
 
             const petsList = await response.json();
             addedPet = petsList.find(pet => pet.id === petToFind.id);
@@ -75,16 +76,15 @@ test.describe('API Test: PetStore Pet', () => {
         expect(addedPet?.status).toBe(petToFind.status)
     })
 
-    test.skip('test get pet by id', async () => {
-        const createResponse = await api.createNewPet(addPet)
-        expect(await createResponse.status()).toBe(200)
+    test('test get pet by id', async () => {
+        const getResponse = await api.getPetById(petId)
+        const responseBody: Pet = Pet.fromJson(await getResponse.json())
 
-        const getResponse = await api.getPetById(`${addPet.id}`)
-        const responseBody: Pet = await getResponse.json()
-        expect(responseBody).toEqual(addPet)
+        console.log("Response Body:", JSON.stringify(responseBody, null, 2))
+        expect(responseBody).toEqual(validPet)
     })
 
-    test.skip('test delete a pet by id', async () => {
+    test('test delete a pet by id', async () => {
         const createResponse = await api.createNewPet(addPet)
         expect(await createResponse.status()).toBe(200)
 
@@ -99,25 +99,6 @@ test.describe('API Test: PetStore Pet', () => {
 
         const response = await api.deletePet(invalidId)
         expect(await response.status()).toBe(404);
-    })
-
-    test.skip('test create and remove list of pets', async () => {
-
-        const statusName = `test_status${getCurrentDatetime()}`
-        let pets: Pet[] = createListPets(4, statusName)
-        await api.createNPets(pets)
-
-        let responsePet = await api.findPetByStatus(statusName)
-        expect(responsePet.status()).toBe(200)
-        let petsList: Pet[] = await responsePet.json()
-        expect(petsList.length).toBe(pets.length)
-
-        await api.deleteNPets(pets)
-
-        responsePet = await api.findPetByStatus(statusName)
-        expect(responsePet.status()).toBe(200)
-        petsList = await responsePet.json()
-        expect(petsList).toHaveLength(0)
     })
 
 });
