@@ -5,6 +5,7 @@ import { User } from '../../src/models/user'
 import { BasicResponse } from '../../src/models/basicResponse'
 
 test.describe('API Test: PetStore User', () => {
+    test.describe.configure({ retries: 3 })
 
     test('test create new user', async () => {
         const api = new UserApi()

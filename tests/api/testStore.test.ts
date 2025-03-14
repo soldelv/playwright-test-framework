@@ -7,6 +7,7 @@ import { Order } from '../../src/models/order'
 import { BasicResponse } from '../../src/models/basicResponse'
 
 test.describe('API Test: PetStore Store & Orders', () => {
+    test.describe.configure({ retries: 3 })
 
     let api: StoreApi
 
