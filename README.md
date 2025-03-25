@@ -95,6 +95,10 @@ npx playwright show-report
 ```
 This will open the test report in your default web browser.
 
+After every pipeline run the results are published in the Actions tab in the repository.
+
+Last report is available via the following link: https://soldelv.github.io/playwright-test-framework/
+
 ## Continuous Integration
 This project is set up with GitHub Actions for Continuous Integration (CI). The workflow file located at .github/workflows/pipeline.yml is configured to run the tests on each push to the master branch. The CI pipeline performs the following steps:
 
@@ -103,4 +107,4 @@ This project is set up with GitHub Actions for Continuous Integration (CI). The 
 - Installs project dependencies.
 - Installs Playwright browsers.
 - Executes the tests.
-- Uploads the test report as an artifact.
+- Uploads the test report.
