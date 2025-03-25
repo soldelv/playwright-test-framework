@@ -1,7 +1,7 @@
 import { BasePage } from './basePage';
 import { Locator, Page } from '@playwright/test';
 
-export class ProductsPage extends BasePage {
+export class ProductPage extends BasePage {
 
     readonly productList: Locator
     readonly addToCartBtn: Locator

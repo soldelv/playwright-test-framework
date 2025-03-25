@@ -1,5 +1,6 @@
 import { BasePage } from './basePage';
 import { Page, Locator } from '@playwright/test';
+import { ProductPage } from './productPage'
 
 export class LoginPage extends BasePage {
 
@@ -16,10 +17,12 @@ export class LoginPage extends BasePage {
         this.errorIcon = page.locator('.fa-times-circle')
     }
 
-    async login(username: string, password: string) {
+    async login(username: string, password: string): Promise<ProductPage> {
         await this.usernameField.fill(username)
         await this.passwordField.fill(password)
         await this.loginButton.click()
+
+        return new ProductPage(this.page);
     }
 
     async successLogin(): Promise<boolean> {

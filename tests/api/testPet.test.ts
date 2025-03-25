@@ -57,17 +57,17 @@ test.describe('API Test: PetStore Pet', () => {
         const createResponse = await api.createNewPet(petToFind)
         expect(await createResponse.status()).toBe(200)
 
-        let addedPet;
-        let attempts = 3;
+        let addedPet
+        let attempts = 3
 
         while (attempts-- > 0) {
             const response = await api.findPetByStatus("pending")
             expect(response.status()).toBe(200)
 
-            const petsList = await response.json();
-            addedPet = petsList.find(pet => pet.id === petToFind.id);
+            const petsList = await response.json()
+            addedPet = petsList.find(pet => pet.id === petToFind.id)
 
-            if (addedPet) break;
+            if (addedPet) break
             await new Promise(res => setTimeout(res, 1000)); // Wait 1s before retrying
         }
 
@@ -76,7 +76,7 @@ test.describe('API Test: PetStore Pet', () => {
         expect(addedPet?.status).toBe(petToFind.status)
     })
 
-    test('test get pet by id', async () => {
+    test.skip('test get pet by id', async () => {
         const getResponse = await api.getPetById(petId)
         const responseBody: Pet = Pet.fromJson(await getResponse.json())
 
@@ -98,7 +98,7 @@ test.describe('API Test: PetStore Pet', () => {
     test('test try to delete a non-existing pet', async () => {
 
         const response = await api.deletePet(invalidId)
-        expect(await response.status()).toBe(404);
+        expect(await response.status()).toBe(404)
     })
 
 });

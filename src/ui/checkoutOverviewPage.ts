@@ -1,5 +1,6 @@
 import { BasePage } from './basePage';
 import { Locator, Page } from '@playwright/test';
+import { CheckoutCompletePage } from '../../src/ui/checkoutCompletePage'
 
 export class CheckoutOverviewPage extends BasePage {
 
@@ -18,9 +19,9 @@ export class CheckoutOverviewPage extends BasePage {
         return (await this.cartItem.count()) === products
     }
 
-    async completeCheckout(): Promise<boolean> {
-        await this.finishBtn.click();
-        return (await this.pageTitle.textContent()) === 'Checkout: Complete!'
+    async completeCheckout(): Promise<CheckoutCompletePage> {
+        await this.finishBtn.click()
+        return new CheckoutCompletePage(this.page)
     }
 
 }

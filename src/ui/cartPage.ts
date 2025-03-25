@@ -1,5 +1,6 @@
 import { BasePage } from './basePage';
 import { Locator, Page } from '@playwright/test';
+import { CheckoutInformationPage } from '../../src/ui/checkoutInformationPage'
 
 export class CartPage extends BasePage {
 
@@ -14,9 +15,9 @@ export class CartPage extends BasePage {
         this.removeBtn = page.getByText('Remove')
     }
 
-    async goToCheckoutPage(): Promise<boolean> {
+    async goToCheckoutPage(): Promise<CheckoutInformationPage> {
         await this.checkoutBtn.click();
-        return (await this.pageTitle.textContent()) === 'Checkout: Your Information'
+        return new CheckoutInformationPage(this.page)
     }
 
     async removeFirstProductFromCart() {
@@ -26,7 +27,7 @@ export class CartPage extends BasePage {
 
     async removeNProductsFromCart(products: number) {
         while (products-- > 0) {
-            await (await this.removeBtn.first()).click();
+            await (await this.removeBtn.first()).click()
         }
     }
 
