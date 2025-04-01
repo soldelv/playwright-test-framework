@@ -1,99 +1,15 @@
-import { User } from '../../../src/models/user'
-import { Pet, Category, Tag } from '../../../src/models/pet'
-import { Order } from '../../../src/models/order'
+import { UserRole } from '../../../src/models/userRole'
+import { Credentials } from '../../../src/models/credentials'
 
-export const newUser = new User(
-    12345,
-    "lalotester",
-    "lalo",
-    "landa",
-    "lalo@test.com",
-    "abc123",
-    "123123123",
-    1
-)
+export const invalidId: number = 10000000000
 
-export const updatedUser = new User(
-    12345,
-    "lalotester2",
-    "lalo",
-    "landa",
-    "lalo@test.com",
-    "abc123",
-    "123123123",
-    1
-)
+export const updateUser = new UserRole("morpheus", "zion resident")
 
-export const petId = "9223372036854775807"
-export const invalidId = "000000000000000000"
+export const newUser = new UserRole("manolo", "leader")
 
-export const addPet = new Pet(
-    12340976512343543,
-    new Category(0, "string"),
-    "necoma",
-    ["string"],
-    [new Tag(0, "string")],
-    "available"
-)
-
-export const newPet = new Pet(
-    getRandomId(),
-    new Category(0, "string"),
-    "necoma",
-    ["string"],
-    [new Tag(0, "string")],
-    "available"
-)
-
-export const petToFind = new Pet(
-    getRandomId(),
-    new Category(1, "buddy"),
-    "Marley",
-    ["string"],
-    [new Tag(0, "test")],
-    "pending"
-)
-
-export const validPet = new Pet(
-    9223372036854775807,
-    new Category(0, "string"),
-    "doggie",
-    ["string"],
-    [new Tag(0, "string")],
-    "available"
-)
-
-export function createListPets(quantity: number, statusName: string): Pet[] {
-    let pets: Pet[] = []
-
-    for (let i = 0; i < quantity; i++) {
-        const pet = new Pet(
-            1234097651234354 + i,
-            new Category(0, "string"),
-            "Marley",
-            ["string"],
-            [new Tag(0, "test")],
-            statusName
-        )
-        pets.push(pet)
-    }
-
-    return pets
-}
-
-export const newOrder = new Order(
-    9222968140491042149,
-    9222968140491042149,
-    1,
-    new Date().toISOString().replace("Z", "+0000"),
-    "placed",
-    true
-)
-
-export function getRandomId(): number {
-    return Math.floor(1000000000000000 + Math.random() * 9000000000000000)
-}
+export const userCredentials = new Credentials("eve.holt@reqres.in", "cityslicka")
+export const invalidCredentials = new Credentials("11111", "11111")
 
 export function getCurrentDatetime(): string {
-    return new Date().toISOString().slice(2, 16).replace(/[-T:]/g, '')
+    return new Date().toISOString()
 }

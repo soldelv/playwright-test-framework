@@ -1,5 +1,5 @@
 export const config = {
-  baseUrl: 'https://petstore.swagger.io/v2',
+  baseUrl: 'https://reqres.in/api',
   headers: {
     "accept": "application/json",
     "Content-Type": "application/json"

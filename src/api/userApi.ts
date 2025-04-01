@@ -1,43 +1,47 @@
 import { APIResponse } from '@playwright/test'
-import { User } from '../models/user'
+import { UserRole } from '../models/userRole'
 import { config } from './config/config'
 import { BaseApi } from './baseApi'
 
 export class UserApi extends BaseApi {
-    static readonly BASE_URL: string = `${config.baseUrl}/user`
+    static readonly BASE_URL: string = `${config.baseUrl}/users`
 
-    async createNewUser(user: User): Promise<APIResponse> {
+    async getUsers(page: number): Promise<APIResponse> {
+        const url = `${UserApi.BASE_URL}?page=${page}`
+
+        return this.get(url, {
+            headers: config.headers
+        })
+    }
+
+    async getUsersWithDelay(delay: number): Promise<APIResponse> {
+        const url = `${UserApi.BASE_URL}?delay=${delay}`
+
+        return this.get(url, {
+            headers: config.headers
+        })
+    }
+
+    async getUserById(id: number): Promise<APIResponse> {
+        const url = `${UserApi.BASE_URL}/${id}`
+
+        return this.get(url, {
+            headers: config.headers
+        })
+    }
+
+    async createNewUser(user: UserRole): Promise<APIResponse> {
         return this.post(UserApi.BASE_URL, user)
     }
 
-    async loginUser(user: User): Promise<APIResponse> {
-        const url = `${UserApi.BASE_URL}/login`
+    async updateUser(id: number, update: UserRole): Promise<APIResponse> {
+        const url = `${UserApi.BASE_URL}/${id}`
 
-        return this.get(url, {
-            params: {
-                username: user.username,
-                password: user.password
-            },
-            headers: config.headers
-        })
+        return this.put(url, update)
     }
 
-    async getUserByUsername(username: String): Promise<APIResponse> {
-        const url = `${UserApi.BASE_URL}/${username}`
-
-        return this.get(url, {
-            headers: config.headers
-        })
-    }
-
-    async updateUser(user: User): Promise<APIResponse> {
-        const url = `${UserApi.BASE_URL}/${user.username}`
-
-        return this.put(url, user)
-    }
-
-    async deleteUser(username: String): Promise<APIResponse> {
-        const url = `${UserApi.BASE_URL}/${username}`
+    async deleteUser(id: number): Promise<APIResponse> {
+        const url = `${UserApi.BASE_URL}/${id}`
 
         return this.delete(url)
     }

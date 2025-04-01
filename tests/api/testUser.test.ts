@@ -1,71 +1,68 @@
 import { test, expect } from '@playwright/test'
 import { UserApi } from '../../src/api/userApi'
-import { newUser, updatedUser } from './data/testData'
+import { updateUser, newUser, getCurrentDatetime, invalidId } from './data/testData'
 import { User } from '../../src/models/user'
-import { BasicResponse } from '../../src/models/basicResponse'
+import { ListUserResponse } from '../../src/models/listUserResponse'
+import { CreateResponse } from '../../src/models/createResponse'
+import { UpdateResponse } from '../../src/models/updateResponse'
 
-test.describe('API Test: PetStore User', () => {
-    test.describe.configure({ retries: 3 })
+test.describe('API Test: Reqres User', () => {
 
-    test('test create new user', async () => {
-        const api = new UserApi()
+    let api: UserApi
 
-        const response = await api.createNewUser(newUser)
-        expect(await response.status()).toBe(200)
-
-        const responseBody: BasicResponse = await response.json()
-        expect(responseBody.message).toBe(`${newUser.id}`)
+    test.beforeEach(async () => {
+        api = new UserApi()
     })
 
-    test('test log in user', async () => {
-        const api = new UserApi()
-        await api.createNewUser(newUser)
-
-        const response = await api.loginUser(newUser)
+    test('test retrieve a list of users', async () => {
+        const response = await api.getUsers(2)
         expect(await response.status()).toBe(200)
 
-        const responseBody: BasicResponse = await response.json()
-        expect(responseBody.message).toContain('logged in user session')
+        const responseBody: ListUserResponse = await response.json()
+        expect(responseBody.data.length).toBeGreaterThan(0)
+        expect(responseBody.page).toEqual(2)
     })
 
-    test('test get user by username', async () => {
-        const api = new UserApi()
-        await api.createNewUser(newUser)
+    test('test retrieve a list of users with delay', async () => {
+        const startTime = performance.now()
+        const response = await api.getUsersWithDelay(3)
+        const endTime = performance.now()
+        const requestTime = parseFloat((endTime - startTime).toFixed(2))
 
-        const response = await api.getUserByUsername(newUser.username)
+        expect(await response.status()).toBe(200)
+        expect(requestTime).toBeGreaterThan(3000)
+        expect(requestTime).toBeLessThan(4000)
+    })
+
+    test('test update an user', async () => {
+        const response = await api.getUsers(1)
         expect(await response.status()).toBe(200)
 
-        const responseBody: User = await response.json()
-        expect(responseBody).toEqual(newUser)
+        const responseListUsers: ListUserResponse = await response.json()
+        const user: User = responseListUsers.data[0]
+
+        const responseUpdate = await api.updateUser(user.id, updateUser)
+        const actualResponse: UpdateResponse = await responseUpdate.json()
+        const actualResponseParsed = Object.assign({}, actualResponse, { updatedAt: actualResponse.updatedAt.slice(0, 16)})
+        const expectedResponse: UpdateResponse = new UpdateResponse(updateUser.name, updateUser.job, getCurrentDatetime().slice(0, 16))
+
+        expect(await responseUpdate.status()).toBe(200)
+        expect(actualResponseParsed).toEqual(expectedResponse)
     })
 
-    test('test update user', async () => {
-        const api = new UserApi()
-        await api.createNewUser(newUser)
-
-        const response = await api.updateUser(updatedUser)
-        expect(await response.status()).toBe(200)
-
-        const responseBody: BasicResponse = await response.json()
-        expect(responseBody.message).toEqual(`${newUser.id}`)
-    })
-
-    test.skip('test delete an user', async () => {
-        const api = new UserApi()
+    test('test delete an user', async () => {
         const createResponse = await api.createNewUser(newUser)
-        expect(await createResponse.status()).toBe(200)
+        expect(await createResponse.status()).toBe(201)
 
-        const response = await api.deleteUser(newUser.username)
-        expect(await response.status()).toBe(200)
+        const responseBody: CreateResponse = await createResponse.json()
+        const deleteResponse = await api.deleteUser(responseBody.id)
 
-        const responseBody: BasicResponse = await response.json()
-        expect(responseBody.message).toEqual(newUser.username)
+        expect(await deleteResponse.status()).toBe(204)
     })
 
-    test('test try to delete a non-existing user', async () => {
-        const api = new UserApi()
+    test('test try to get a non-existing id', async () => {
+        const response = await api.getUserById(invalidId)
 
-        const response = await api.deleteUser("johnnyBravo123")
         expect(await response.status()).toBe(404)
     })
 

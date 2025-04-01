@@ -1,43 +1,25 @@
 export class User {
     id: number
-    username: string
-    firstName: string
-    lastName: string
     email: string
-    password: string
-    phone: string
-    userStatus: number
+    first_name: string
+    last_name: string
+    avatar: string
 
-    constructor(
-        id: number,
-        username: string,
-        firstName: string,
-        lastName: string,
-        email: string,
-        password: string,
-        phone: string,
-        userStatus: number
-    ) {
+    constructor(id: number, email: string, firstName: string, lastName: string, avatar: string,) {
         this.id = id
-        this.username = username
-        this.firstName = firstName
-        this.lastName = lastName
         this.email = email
-        this.password = password
-        this.phone = phone
-        this.userStatus = userStatus
+        this.first_name = firstName
+        this.last_name = lastName
+        this.avatar = avatar
     }
 
     static fromJson(data: any): User {
         return new User(
             data.id ?? 0,
-            data.username ?? "",
-            data.firstName ?? "",
-            data.lastName ?? "",
             data.email ?? "",
-            data.password ?? "",
-            data.phone ?? "",
-            data.userStatus ?? 0
+            data.first_name ?? "",
+            data.last_name ?? "",
+            data.avatar ?? ""
         );
     }
 }
