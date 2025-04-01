@@ -15,8 +15,23 @@ export class CheckoutOverviewPage extends BasePage {
         this.cancelBtn = page.locator('#cancel')
     }
 
-    async checkNumberOfProductsOnCart(products: number): Promise<boolean> {
-        return (await this.cartItem.count()) === products
+    async checkTotalPrice(expectedPriceTotal: number): Promise<boolean> {
+        const totalPrice = await this.page.locator('.summary_subtotal_label').textContent()
+        const totalPriceValue = parseFloat(totalPrice?.replace('Item total: $', '') ?? '0')
+
+        return totalPriceValue == expectedPriceTotal
+    }
+
+    async checkTaxAndTotal(expectedPriceTotal: number): Promise<boolean> {
+        const expectedTax = parseFloat((expectedPriceTotal * 0.08).toFixed(2))
+        const expectedTotal = expectedPriceTotal + expectedTax
+
+        const tax = await this.page.locator('.summary_tax_label').textContent()
+        const taxValue = parseFloat(tax?.replace('Tax: $', '') ?? '0')
+        const total = await this.page.locator('.summary_total_label').textContent()
+        const totalValue = parseFloat(total?.replace('Total: $', '') ?? '0')
+
+        return taxValue === expectedTax && totalValue === expectedTotal
     }
 
     async completeCheckout(): Promise<CheckoutCompletePage> {

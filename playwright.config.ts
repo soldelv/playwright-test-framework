@@ -5,6 +5,7 @@ export default defineConfig({
   timeout: 30 * 1000,
   retries: 0,
   reporter: 'html',
+
   use: {
     browserName: 'chromium',
     headless: true,
@@ -13,4 +14,5 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
+  
 });

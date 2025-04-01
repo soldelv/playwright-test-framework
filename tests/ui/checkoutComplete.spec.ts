@@ -3,20 +3,22 @@ import { LoginPage } from '../../src/ui/loginPage'
 import { ProductPage } from '../../src/ui/productPage'
 import { CartPage } from '../../src/ui/cartPage'
 import { validUser, checkoutInfo } from './data/testData'
+import { Product } from '../../src/models/product'
 
-test.describe('E2E Test for Checkout', () => {
-    let productsPage: ProductPage
+test.describe('Test Full Checkout', () => {
+
+    let productPage: ProductPage
 
     test.beforeEach(async ({ page }) => {
         const loginPage = new LoginPage(page)
-        
+
         await loginPage.navigate()
-        productsPage = await loginPage.login(validUser.username, validUser.password)
+        productPage = await loginPage.login(validUser.username, validUser.password)
     });
 
     test('test successfully checkout', async ({ page }) => {
-        await productsPage.addNProductsToCart(1)
-        await productsPage.checkRemoveButtonIsDisplayedInFirstProduct()
+        const productList: Product[] = await productPage.addToCartNProducts(3)
+        const totalPrice: number = productPage.calculateTotalPrice(productPage.extractPrices(productList))
 
         const cartPage = new CartPage(page)
         await cartPage.goToCartPage()
@@ -24,11 +26,12 @@ test.describe('E2E Test for Checkout', () => {
 
         const checkoutOverviewPage = await checkoutInformation.completeCheckoutInformation(checkoutInfo)
 
-        expect(await checkoutOverviewPage.checkNumberOfProductsOnCart(1))
+        expect(await checkoutOverviewPage.checkTotalPrice(totalPrice)).toBeTruthy()
+        expect(await checkoutOverviewPage.checkTaxAndTotal(totalPrice)).toBeTruthy()
         const checkoutCompletePage = await checkoutOverviewPage.completeCheckout()
 
         expect(await checkoutCompletePage.successCheckoutMessageIsDisplayed()).toBeTruthy()
+
     });
 
 });
-
