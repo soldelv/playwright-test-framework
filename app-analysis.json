@@ -1,0 +1,85 @@
+{
+  "appName": "SauceDemo",
+  "url": "https://www.saucedemo.com/",
+  "pages": [
+    {
+      "page": "Login",
+      "elements": {
+        "url": "https://www.saucedemo.com/",
+        "title": "Swag Labs",
+        "inputs": 3,
+        "buttons": 0,
+        "errorMessages": 0
+      },
+      "possibleTests": [
+        "Login con credenciales válidas",
+        "Login con credenciales inválidas",
+        "Validar errores de entrada vacía",
+        "Validar usuario bloqueado"
+      ]
+    },
+    {
+      "page": "Product",
+      "elements": {
+        "url": "https://www.saucedemo.com/inventory.html",
+        "products": 6,
+        "addToCartButtons": 6,
+        "sortOptions": 1
+      },
+      "possibleTests": [
+        "Agregar múltiples productos al carrito",
+        "Remover productos del carrito",
+        "Ordenar productos por precio",
+        "Validar información del producto"
+      ]
+    },
+    {
+      "page": "Cart",
+      "elements": {
+        "url": "https://www.saucedemo.com/cart.html",
+        "items": 0,
+        "checkoutButton": true
+      },
+      "possibleTests": [
+        "Ver productos en el carrito",
+        "Remover productos del carrito",
+        "Proceder al checkout"
+      ]
+    }
+  ],
+  "generatedAt": "2026-06-19T13:57:50.246Z",
+  "recommendedTestCases": [
+    {
+      "name": "End-to-End: Login → Add Products → Checkout",
+      "priority": "HIGH",
+      "steps": [
+        "Login con credenciales válidas",
+        "Agregar 5 productos diferentes",
+        "Verificar que el carrito muestra 5",
+        "Proceder al checkout",
+        "Llenar información de envío",
+        "Completar compra"
+      ]
+    },
+    {
+      "name": "Validación: Error de entrada en checkout",
+      "priority": "MEDIUM",
+      "steps": [
+        "Login",
+        "Agregar 1 producto",
+        "Ir al carrito",
+        "Proceder al checkout",
+        "Dejar campos vacíos",
+        "Verificar mensajes de error"
+      ]
+    },
+    {
+      "name": "Edge Case: Usuario bloqueado",
+      "priority": "MEDIUM",
+      "steps": [
+        "Intentar login con locked_out_user",
+        "Verificar mensaje de error apropiado"
+      ]
+    }
+  ]
+}

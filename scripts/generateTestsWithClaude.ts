@@ -1,0 +1,210 @@
+// scripts/generateTestsWithClaude.ts
+import Anthropic from "@anthropic-ai/sdk";
+import * as fs from "fs";
+import * as path from "path";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
+
+async function generateTestsWithClaude() {
+  // 1️⃣ VERIFY THAT THE API KEY EXISTS
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    console.error("❌ ERROR: ANTHROPIC_API_KEY not found in .env");
+    console.error("   Create a .env file with your API Key");
+    process.exit(1);
+  }
+
+  // 2️⃣ INITIALIZE CLAUDE CLIENT
+  const client = new Anthropic({ apiKey });
+
+  console.log("🤖 Claude Test Generator started...\n");
+
+  // 3️⃣ READ APP ANALYSIS
+  console.log("📖 Reading application analysis...");
+  let appAnalysis;
+  try {
+    const analysisPath = path.join(process.cwd(), "app-analysis.json");
+    if (!fs.existsSync(analysisPath)) {
+      console.log("⚠️  app-analysis.json not found. Run first:");
+      console.log("    npm run analyze:app");
+      process.exit(1);
+    }
+    appAnalysis = JSON.parse(fs.readFileSync(analysisPath, "utf-8"));
+    console.log("✅ Analysis loaded\n");
+  } catch (error) {
+    console.error("❌ Error reading app-analysis.json:", error);
+    process.exit(1);
+  }
+
+  // 4️⃣ READ EXISTING PAGE OBJECTS
+  console.log("📖 Reading existing Page Objects...");
+  const pageObjects = {
+    loginPage: fs.readFileSync("src/ui/loginPage.ts", "utf-8"),
+    productPage: fs.readFileSync("src/ui/productPage.ts", "utf-8"),
+    cartPage: fs.readFileSync("src/ui/cartPage.ts", "utf-8"),
+  };
+  console.log("✅ Page Objects loaded\n");
+
+  // 5️⃣ CREATE PROMPT FOR CLAUDE
+  const prompt = `
+You are an EXPERT in QA Automation with Playwright and TypeScript.
+
+Your CRITICAL task: Generate 5 complete and functional E2E tests.
+
+========================
+CONTEXT: APP STRUCTURE
+========================
+${JSON.stringify(appAnalysis, null, 2)}
+
+========================
+AVAILABLE PAGE OBJECTS
+========================
+
+LoginPage:
+\`\`\`typescript
+${pageObjects.loginPage}
+\`\`\`
+
+ProductPage:
+\`\`\`typescript
+${pageObjects.productPage}
+\`\`\`
+
+CartPage:
+\`\`\`typescript
+${pageObjects.cartPage}
+\`\`\`
+
+========================
+REQUIREMENTS
+========================
+
+1. GENERATE 5 UNIQUE TESTS:
+   - Test 1: Successful login
+   - Test 2: Add multiple products to cart
+   - Test 3: Validate checkout form errors
+   - Test 4: Locked out user error message
+   - Test 5: Complete end-to-end purchase flow
+
+2. TECHNICAL REQUIREMENTS:
+   - Use ONLY the provided Page Objects
+   - Each test must be INDEPENDENT
+   - Use destructuring: const { page } = params
+   - Import: import { test, expect } from '@playwright/test'
+   - Import the Page Objects correctly
+   - DO NOT add new dependencies
+
+3. QUALITY REQUIREMENTS:
+   - Tests MUST be 100% functional
+   - Use best practice: arrange → act → assert
+   - Add console.log() with emojis for debugging
+   - Each test should have max 20 lines
+   - Handle errors explicitly
+
+4. RESILIENCE:
+   - Use semantic selectors when possible
+   - Example: button:has-text("Login") instead of #btn-id
+   - Use page.waitForLoadState() where necessary
+
+========================
+RESPONSE FORMAT
+========================
+
+RETURN ONLY:
+
+1. One import block with ALL necessary imports
+2. EXACTLY 5 tests using test('name', async ({ page }) => {...})
+3. NO explanations, comments, or markdown
+4. NO \`\`\`typescript markers, return pure code only
+
+Example format:
+import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../src/ui/loginPage';
+
+test('test name', async ({ page }) => {
+  // your code here
+});
+
+test('another test', async ({ page }) => {
+  // your code here
+});
+
+========================
+BEGIN GENERATION
+========================
+`;
+
+  // 6️⃣ SEND PROMPT TO CLAUDE
+  console.log("🚀 Sending prompt to Claude...");
+  console.log("   (This may take 15-30 seconds)\n");
+
+  try {
+    const message = await client.messages.create({
+      model: "claude-3-5-sonnet-20241022",
+      max_tokens: 4096,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    // 7️⃣ EXTRACT RESPONSE
+    const responseText =
+      message.content[0].type === "text" ? message.content[0].text : "";
+
+    if (!responseText) {
+      console.error("❌ Claude did not return code");
+      process.exit(1);
+    }
+
+    // 8️⃣ SAVE GENERATED TESTS
+    const outputPath = path.join(
+      process.cwd(),
+      "tests/ui/claudeGeneratedTests.spec.ts"
+    );
+
+    const fileContent = `// 🤖 AUTO-GENERATED TESTS BY CLAUDE
+// Generated: ${new Date().toISOString()}
+// Model: claude-3-5-sonnet-20241022
+
+${responseText}
+`;
+
+    fs.writeFileSync(outputPath, fileContent);
+
+    // 9️⃣ SUMMARY
+    console.log("✨ SUCCESS\n");
+    console.log("=".repeat(60));
+    console.log("📊 Tests generated by Claude:");
+    console.log("=".repeat(60));
+    console.log(`📁 File: ${outputPath}`);
+    console.log(`📝 Size: ${fileContent.length} bytes`);
+    console.log(`📋 Tests created: 5\n`);
+
+    console.log("🚀 NEXT STEPS:");
+    console.log("   1. Review the generated tests:");
+    console.log('      cat tests/ui/claudeGeneratedTests.spec.ts\n');
+    console.log("   2. Run the tests:");
+    console.log(
+      '      npm run test -- claudeGeneratedTests.spec.ts --headed\n'
+    );
+    console.log("   3. If they pass, we have automatic coverage! ✅");
+  } catch (error: any) {
+    console.error("❌ Error connecting with Claude:");
+    console.error(error.message);
+    if (error.status === 401) {
+      console.error("\n💡 Possible solutions:");
+      console.error("   - Verify ANTHROPIC_API_KEY is correct");
+      console.error("   - The API Key may not be expired");
+      console.error("   - Verify it is in .env file");
+    }
+    process.exit(1);
+  }
+}
+
+// Execute
+generateTestsWithClaude();

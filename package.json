@@ -7,7 +7,12 @@
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
     "test:report": "npx playwright show-report",
-    "generate:tests": "ts-node scripts/generateTests.ts"
+    "generate:tests": "ts-node scripts/generateTests.ts",
+    "analyze:app": "ts-node scripts/analyzeApp.ts",
+    "generate:ai-tests": "ts-node scripts/generateTestsWithAI.ts",
+    "generate:claude-tests": "ts-node scripts/generateTestsWithClaude.ts",
+    "test:ai": "npm run generate:ai-tests && npm run test -- aiGeneratedTests.spec.ts --headed",
+    "test:claude": "npm run generate:claude-tests && npm run test -- claudeGeneratedTests.spec.ts --headed"
   },
   "repository": {
     "type": "git",
@@ -21,6 +26,7 @@
   },
   "homepage": "https://github.com/soldelv/playwright-test-framework#readme",
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.105.0",
     "@eslint/js": "^9.19.0",
     "@playwright/test": "^1.51.0",
     "@types/node": "^26.0.0",
@@ -32,5 +38,8 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.23.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
   }
 }
