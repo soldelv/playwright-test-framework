@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "test:report": "npx playwright show-report"
+    "test:report": "npx playwright show-report",
+    "generate:tests": "ts-node scripts/generateTests.ts"
   },
   "repository": {
     "type": "git",
@@ -22,10 +23,11 @@
   "devDependencies": {
     "@eslint/js": "^9.19.0",
     "@playwright/test": "^1.51.0",
+    "@types/node": "^26.0.0",
     "eslint": "^9.19.0",
     "globals": "^15.14.0",
     "playwright": "^1.50.0",
-    "playwright-mcp": "^0.0.19",
+    "playwright-mcp": "^0.0.10",
     "prettier": "^3.4.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
