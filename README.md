@@ -28,6 +28,7 @@ A modern test automation framework built with [Playwright](https://playwright.de
 - [Running Tests](#running-tests)
 - [🤖 AI Test Generation](#-ai-test-generation)
 - [Self-Healing Locators](#self-healing-locators)
+- [AI Error Analysis](#ai-error-analysis)
 - [Adding New Features](#adding-new-features-with-ai)
 - [Test Reports](#viewing-test-reports)
 - [CI/CD](#continuous-integration)
@@ -179,6 +180,26 @@ await loginButton.click(0);  // Clicks the first matching element
 - No manual selector updates needed
 - Works with dynamic UIs
 - Improves test stability
+
+## AI Error Analysis
+#### **What Problem Does It Solve?**
+When tests fail, you get a generic error message. `AIErrorAnalyzer` captures:
+- Screenshots of the failure
+- Page HTML at moment of failure
+- Error classification (Selector, Timeout, Assertion, etc.)
+- Browser and environment info
+- Generates prompts for Claude AI analysis
+
+#### **Features**
+- Automatic error classification
+- Screenshots and HTML capture
+- Claude-ready analysis prompts
+- Local analysis storage
+- Comprehensive failure reports
+- Automatic cleanup of old analyses
+
+#### **How to Use**
+- See [AI_ERROR_ANALYZER.md](AI_ERROR_ANALYZER.md) for complete guide for error analyzing
 
 ## Adding New Features with AI
 - See [QUICK_START.md](QUICK_START.md) for complete guide

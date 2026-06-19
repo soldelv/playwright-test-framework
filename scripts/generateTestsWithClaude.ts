@@ -1,28 +1,26 @@
-// scripts/generateTestsWithClaude.ts
 import Anthropic from "@anthropic-ai/sdk";
 import * as fs from "fs";
 import * as path from "path";
 import dotenv from "dotenv";
 
-// Load environment variables
 dotenv.config();
 
 async function generateTestsWithClaude() {
   // 1️⃣ VERIFY THAT THE API KEY EXISTS
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    console.error("❌ ERROR: ANTHROPIC_API_KEY not found in .env");
-    console.error("   Create a .env file with your API Key");
+    console.error("ERROR: ANTHROPIC_API_KEY not found in .env");
+    console.error("Create a .env file with your API Key");
     process.exit(1);
   }
 
   // 2️⃣ INITIALIZE CLAUDE CLIENT
   const client = new Anthropic({ apiKey });
 
-  console.log("🤖 Claude Test Generator started...\n");
+  console.log("Claude Test Generator started...\n");
 
   // 3️⃣ READ APP ANALYSIS
-  console.log("📖 Reading application analysis...");
+  console.log("Reading application analysis...");
   let appAnalysis;
   try {
     const analysisPath = path.join(process.cwd(), "app-analysis.json");
@@ -185,7 +183,7 @@ ${responseText}
     console.log(`📝 Size: ${fileContent.length} bytes`);
     console.log(`📋 Tests created: 5\n`);
 
-    console.log("🚀 NEXT STEPS:");
+    console.log("NEXT STEPS:");
     console.log("   1. Review the generated tests:");
     console.log('      cat tests/ui/claudeGeneratedTests.spec.ts\n');
     console.log("   2. Run the tests:");

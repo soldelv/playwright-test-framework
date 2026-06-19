@@ -1,4 +1,3 @@
-// scripts/generateTestsWithAI.ts
 import * as fs from "fs";
 import * as path from "path";
 
@@ -21,7 +20,7 @@ test('Add 5 products to cart and verify cart count', async ({ page }) => {
   const hasProducts = await productPage.checkCartIconContainsProductsSelected(5);
   expect(hasProducts).toBeTruthy();
 
-  console.log('✅ Successfully added 5 products to cart');
+  console.log(' Successfully added 5 products to cart');
 });
     `,
     },
@@ -54,7 +53,7 @@ test('Checkout form validation - last name required', async ({ page }) => {
   const errorMessage = await page.locator('[data-test="error"]').textContent();
   expect(errorMessage).toContain('Last Name');
 
-  console.log('✅ Form validation working');
+  console.log(' Form validation working');
 });
     `,
     },
@@ -74,14 +73,14 @@ test('Locked out user sees appropriate error', async ({ page }) => {
   const errorMessage = await loginPage.getErrorMessage();
   expect(errorMessage).toContain('Sorry, this user has been locked out');
 
-  console.log('✅ Locked out user error verified');
+  console.log(' Locked out user error verified');
 });
     `,
     },
 ];
 
 function generateTestFiles() {
-    console.log("🤖 AI Test Generator (Simulated)\n");
+    console.log(" AI Test Generator (Simulated)\n");
 
     const allTests = aiGeneratedTestCases.map((tc) => tc.implementation).join("\n\n");
     const outputPath = path.join(process.cwd(), "tests/ui/aiGeneratedTests.spec.ts");
@@ -96,8 +95,8 @@ function generateTestFiles() {
         console.log(`   ${idx + 1}. ${tc.name}`);
     });
 
-    console.log(`\n✨ File saved: ${outputPath}`);
-    console.log("\n🚀 Next: npm run test -- aiGeneratedTests.spec.ts --headed\n");
+    console.log(`\nFile saved: ${outputPath}`);
+    console.log("\nNext: npm run test -- aiGeneratedTests.spec.ts --headed\n");
 }
 
 generateTestFiles();
