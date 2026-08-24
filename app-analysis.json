@@ -12,10 +12,10 @@
         "errorMessages": 0
       },
       "possibleTests": [
-        "Login con credenciales válidas",
-        "Login con credenciales inválidas",
-        "Validar errores de entrada vacía",
-        "Validar usuario bloqueado"
+        "Login with valid credentials",
+        "Login with invalid credentials",
+        "Validate empty field errors",
+        "Verify locked out user message"
       ]
     },
     {
@@ -27,10 +27,10 @@
         "sortOptions": 1
       },
       "possibleTests": [
-        "Agregar múltiples productos al carrito",
-        "Remover productos del carrito",
-        "Ordenar productos por precio",
-        "Validar información del producto"
+        "Add multiple products to cart",
+        "Remove products from cart",
+        "Sort products by price",
+        "Verify product information"
       ]
     },
     {
@@ -41,44 +41,44 @@
         "checkoutButton": true
       },
       "possibleTests": [
-        "Ver productos en el carrito",
-        "Remover productos del carrito",
-        "Proceder al checkout"
+        "View products in cart",
+        "Remove products from cart",
+        "Proceed to checkout"
       ]
     }
   ],
-  "generatedAt": "2026-06-19T13:57:50.246Z",
+  "generatedAt": "2026-06-19T14:24:11.952Z",
   "recommendedTestCases": [
     {
       "name": "End-to-End: Login → Add Products → Checkout",
       "priority": "HIGH",
       "steps": [
-        "Login con credenciales válidas",
-        "Agregar 5 productos diferentes",
-        "Verificar que el carrito muestra 5",
-        "Proceder al checkout",
-        "Llenar información de envío",
-        "Completar compra"
+        "Login with valid credentials",
+        "Add 5 different products",
+        "Verify cart shows 5",
+        "Proceed to checkout",
+        "Fill shipping information",
+        "Complete purchase"
       ]
     },
     {
-      "name": "Validación: Error de entrada en checkout",
+      "name": "Validation: Checkout form errors",
       "priority": "MEDIUM",
       "steps": [
         "Login",
-        "Agregar 1 producto",
-        "Ir al carrito",
-        "Proceder al checkout",
-        "Dejar campos vacíos",
-        "Verificar mensajes de error"
+        "Add 1 product",
+        "Go to cart",
+        "Proceed to checkout",
+        "Leave fields empty",
+        "Verify error messages"
       ]
     },
     {
-      "name": "Edge Case: Usuario bloqueado",
+      "name": "Edge Case: Locked out user",
       "priority": "MEDIUM",
       "steps": [
-        "Intentar login con locked_out_user",
-        "Verificar mensaje de error apropiado"
+        "Attempt login with locked_out_user",
+        "Verify appropriate error message"
       ]
     }
   ]

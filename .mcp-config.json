@@ -9,8 +9,23 @@
                 "PLAYWRIGHT_HEADLESS": "false",
                 "PLAYWRIGHT_TIMEOUT": "30000"
             }
+        },
+        "github": {
+            "type": "http",
+            "url": "https://api.githubcopilot.com/mcp/",
+            "headers": {
+                "Authorization": "Bearer ${input:github_mcp_pat}"
+            }
         }
     },
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "github_mcp_pat",
+            "description": "GitHub Personal Access Token",
+            "password": true
+        }
+    ],
     "testFramework": "playwright",
     "selfHealing": {
         "enabled": true,
