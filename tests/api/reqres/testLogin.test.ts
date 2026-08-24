@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { LoginApi } from '../../src/api/loginApi'
+import { LoginApi } from '../../../src/api/reqres/loginApi'
 import { userCredentials, invalidCredentials } from './data/testData'
 
 test.describe('API Test: Reqres User', () => {

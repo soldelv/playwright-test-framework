@@ -1,7 +1,7 @@
 import { APIResponse } from '@playwright/test'
-import { Credentials } from '../models/credentials'
+import { Credentials } from '../../models/credentials'
 import { config } from './config/config'
-import { BaseApi } from './baseApi'
+import { BaseApi } from '../baseApi'
 
 export class LoginApi extends BaseApi {
 

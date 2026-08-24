@@ -15,11 +15,11 @@ Use this agent when the user says things like:
 
 The goal is to generate test coverage based on an API spec while matching the project conventions already used in this repository:
 
-- API client classes live under `src/api/`
+- API client classes live under `src/api/<serviceName>/`
 - shared base logic lives in `src/api/baseApi.ts`
 - models live under `src/models/`
-- test data lives under `tests/api/data/testData.ts`
-- test files live under `tests/api/*.test.ts`
+- test data lives under `tests/api/<serviceName>/data/testData.ts`
+- test files live under `tests/api/<serviceName>/*.test.ts`
 - test style uses `test.describe(...)` + `test.beforeEach(...)` + `expect(...)`
 
 ## Required project structure to follow
@@ -29,22 +29,24 @@ Before generating code, read these files first:
 - `src/api/baseApi.ts`
 - `src/api/loginApi.ts`
 - `src/api/userApi.ts`
-- `tests/api/testLogin.test.ts`
-- `tests/api/testUser.test.ts`
-- `tests/api/data/testData.ts`
+- `tests/api/reqres/testLogin.test.ts`
+- `tests/api/reqres/testUser.test.ts`
+- `tests/api/reqres/data/testData.ts`
 - `src/models/*.ts`
 
 Follow the same patterns exactly:
 
 - API methods call `this.get`, `this.post`, `this.put`, or `this.delete`
+- each service must have its own folder under `src/api/<serviceName>/` and `tests/api/<serviceName>/`
 - each resource has its own class like `LoginApi` or `UserApi`
-- each test file is focused on one domain/resource
+- each test file is focused on one domain/resource within that service folder
 - tests validate status codes and JSON payloads
-- test data is centralized in `tests/api/data/testData.ts`
+- test data is centralized in `tests/api/<serviceName>/data/testData.ts`
 - tests are grouped in `test.describe('<domain>')`
 - use `test.beforeEach` to create a new API client instance
 - prefer explicit assertions like `expect(await response.status()).toBe(200)`
 - parse JSON to typed models when the project already has a corresponding model
+- create the service folder structure automatically when the spec is for a new API domain
 
 ## Step-by-step procedure
 
@@ -77,9 +79,21 @@ Extract from the spec:
 
 If the spec is not valid/complete, ask the user for a better version instead of guessing.
 
-### 3. Infer the resource and API class name
+### 3. Infer the service name and create the service folder structure
 
-Create or update a class under `src/api/` following the existing convention:
+Create the service folder structure before generating any files, following the example pattern used by Reqres:
+
+- `src/api/<serviceName>/`
+- `tests/api/<serviceName>/`
+- `tests/api/<serviceName>/data/`
+
+Examples:
+
+- `src/api/reqres/`
+- `tests/api/reqres/`
+- `tests/api/reqres/data/`
+
+Then create or update a class inside `src/api/<serviceName>/` following the existing convention:
 
 - `LoginApi` for auth/login
 - `UserApi` for users
@@ -93,7 +107,7 @@ The class should extend `BaseApi` and expose typed methods such as:
 - `updateUser(id: number, payload: UserRole)`
 - `deleteUser(id: number)`
 
-Use the same naming convention as the existing repository.
+Use the same naming convention as the existing repository. Do not place new service files directly in the root `src/api/` or `tests/api/` folders unless the spec specifically targets an existing root-level API namespace already present in the project.
 
 ### 4. Generate or reuse models
 
@@ -114,7 +128,7 @@ Follow the naming pattern already used in the project.
 
 ### 5. Update or create test data
 
-Use `tests/api/data/testData.ts` as the central place for sample payloads and constants.
+Use `tests/api/<serviceName>/data/testData.ts` as the central place for sample payloads and constants.
 
 Add:
 
@@ -128,7 +142,7 @@ Do not hardcode test values directly inside the test file if they belong in shar
 
 ### 6. Generate the test file in the same style
 
-Create or update a file under `tests/api/` named like:
+Create or update a file under `tests/api/<serviceName>/` named like:
 
 - `testLogin.test.ts`
 - `testUser.test.ts`
@@ -208,10 +222,19 @@ After generating code:
 
 The generated result should include all of the following when applicable:
 
-1. `src/api/<resource>Api.ts` with CRUD methods for the endpoints
+1. `src/api/<serviceName>/<resource>Api.ts` with CRUD methods for the endpoints
 2. `src/models/<resource>.ts` or reused existing model files
-3. `tests/api/data/testData.ts` additions for payloads, IDs, and invalid cases
-4. `tests/api/test<Resource>.test.ts` with the API scenarios corresponding to the spec
+3. `tests/api/<serviceName>/data/testData.ts` additions for payloads, IDs, and invalid cases
+4. `tests/api/<serviceName>/test<Resource>.test.ts` with the API scenarios corresponding to the spec
+5. a service folder created under `src/api/<serviceName>/` and `tests/api/<serviceName>/` whenever the spec represents a new API domain
+
+Follow the same layout as the Reqres example:
+
+- `tests/api/reqres/testLogin.test.ts`
+- `tests/api/reqres/testUser.test.ts`
+- `tests/api/reqres/data/testData.ts`
+- `src/api/reqres/loginApi.ts`
+- `src/api/reqres/userApi.ts`
 
 ## Final rule
 

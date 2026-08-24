@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test'
 import { UserApi } from '../../src/api/userApi'
 import { updateUser, newUser, getCurrentDatetime, invalidId } from './data/testData'
-import { User } from '../../src/models/user'
-import { ListUserResponse } from '../../src/models/listUserResponse'
-import { CreateResponse } from '../../src/models/createResponse'
-import { UpdateResponse } from '../../src/models/updateResponse'
+import { User } from '../../../src/models/user'
+import { ListUserResponse } from '../../../src/models/listUserResponse'
+import { CreateResponse } from '../../../src/models/createResponse'
+import { UpdateResponse } from '../../../src/models/updateResponse'
 
 test.describe('API Test: Reqres User', () => {
 

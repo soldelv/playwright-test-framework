@@ -1,5 +1,5 @@
 import { APIResponse, request } from '@playwright/test'
-import { config } from './config/config'
+import { config } from './reqres/config/config'
 import * as fs from 'fs'
 
 export abstract class BaseApi {

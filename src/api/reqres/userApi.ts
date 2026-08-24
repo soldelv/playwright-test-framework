@@ -1,7 +1,7 @@
 import { APIResponse } from '@playwright/test'
 import { UserRole } from '../models/userRole'
-import { config } from './config/config'
-import { BaseApi } from './baseApi'
+import { config } from './reqres/config/config'
+import { BaseApi } from './reqres/baseApi'
 
 export class UserApi extends BaseApi {
     static readonly BASE_URL: string = `${config.baseUrl}/users`
